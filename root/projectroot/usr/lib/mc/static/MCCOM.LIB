@@ -275,16 +275,21 @@ end sub
 
 
 public sub com_putLocationXy(byval path as string, byval pos as location of xy)
-  call com_putDouble(path+"/x", pos{1})
-  call com_putDouble(path+"/y", pos{2})
+	com_putDouble(path+"/x", pos{1})
+	com_putDouble(path+"/y", pos{2})
 end sub
 
+public sub com_putLocationXyz(byval path as string, byval pos as location of xyz)
+	com_putDouble(path+"/x", pos{1})
+	com_putDouble(path+"/y", pos{2})
+	com_putDouble(path+"/z", pos{3})
+end sub
 
 public sub com_putLocationXyzr(byval path as string, byval pos as location of xyzr)
-  call com_putDouble(path+"/x", pos{1})
-  call com_putDouble(path+"/y", pos{2})
-  call com_putDouble(path+"/z", pos{3})
-  call com_putDouble(path+"/r", pos{4})
+	com_putDouble(path+"/x", pos{1})
+	com_putDouble(path+"/y", pos{2})
+	com_putDouble(path+"/z", pos{3})
+	com_putDouble(path+"/r", pos{4})
 end sub
 
 
