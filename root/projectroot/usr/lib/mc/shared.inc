@@ -50,21 +50,42 @@ function setup($section=null, $key=null) {
 }
 
 
-function awaitCondition($condition, $timeout, $result=false, $ifnot=false) {
+function awaitCondition($condition, $timeout, $sleep=false, $settle=0, $result=false, $ifnot=false) {
+	ll("'### awaitCondition({$condition})");
+	if ($sleep) {
+		ll("sleep {$sleep}");
+	}
 	ll('com_store()');
 	ll('com_putLong("/timeout", system.clock + '.$timeout.')');
-	ll('while not ('.$condition.') and system.clock < com_getLong("/timeout")');
-	lll('sleep '.min(20, $timeout));
-	ll('end while');
-	ll('com_restore()');
+	ll('com_putLong("/settle",  system.clock + '.$settle.')');
+	ll('com_putBool("/result",  false)');
+	ll('do');
+		$poll = min(20, $timeout);
+		lll("if {$condition} then");
+			llll('if system.clock >= com_getLong("/settle") then');
+				lllll('com_putBool("/result", true)');
+			llll('else');
+				lllll("sleep {$poll}");
+			llll('end if');
+		lll('else');
+			llll("sleep {$poll}");
+			llll('com_putLong("/settle", system.clock + '.$settle.')');
+		lll('end if');
+	ll('loop until com_getBool("/result") or system.clock > com_getLong("/timeout")');
 	if ($result) {
-		ll("$result = $condition");
+		ll($result.' = com_getBool("/result")');
 	}
 	if ($ifnot) {
-		ll('if not ('.($result?:$condition).') then');
+		ll('if not com_getBool("/result") then');
+			lll('com_restore()');
 			call($ifnot);
+		ll('else');
+			lll('com_restore()');
 		ll('end if');
+	} else {
+		ll('com_restore()');
 	}
+	ll("'### end awaitCondition");
 }
 
 

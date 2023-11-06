@@ -46,8 +46,8 @@ class {
 		});
 	}
 	
-	save() {
-		$.post(ajaxUrl('mc.license'), ko.mapping.toJSON(model.license));
+	save(ctx, ev) {
+		gui.feedback(ev.target, $.post(ajaxUrl('mc.license'), ko.mapping.toJSON(model.license)));
 	}
 }
 {% end %}

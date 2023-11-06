@@ -91,7 +91,7 @@ end sub
 
 
 public sub log_debugMessage(byval message_ as string)
-	log_message(log_prioDebug, message_, "-", scope)
+	log_message(log_prioInfo, message_, "-", scope)
 	log_send()
 end sub
 

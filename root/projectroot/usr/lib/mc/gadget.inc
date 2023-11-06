@@ -6,7 +6,7 @@ $gadget_init = function($port, $ip='') use (&$gadget) {
 	lib('begin', [
 		"dim shared this_udpReceiver			as long",
 		"dim shared this_udpSender				as long",
-		"dim shared this_udpSenderAddress		as string = ".s('192.168.173.'.$ip),
+		"dim shared this_udpSenderAddress		as string = ".s(str_contains($ip,'.')?$ip:'192.168.173.'.$ip),
 	]);
 	lib('init', function() use ($port) {
 		com_openUdpReceiver('this_udpReceiver', $port);
